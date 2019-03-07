@@ -34,6 +34,7 @@ function restore () {
 	    echo $?
 		echo $(date) > /data/.restored
 	else
+	    echo $?
 		echo "Restore fail."
 		exit 1
 	fi
