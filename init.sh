@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CLI="/entrypoint.sh"
+CLI="/usr/bin/duplicati-commandline"
 BUCKET=${BUCKET}
 COMMAND=$1
 
@@ -9,7 +9,7 @@ SERVER="s3://$(echo ${BACKUP_S3_KEY}-${BUCKET} | tr '[:upper:]' '[:lower:]')/"
 MONO_EXTERNAL_ENCODINGS="UTF-8"
 
 function test_var () {
-    if [ ! -z "$1" ]; then
+    if [ -z "$1" ]; then
         echo "Variable is not set."
         exit 1
     fi
