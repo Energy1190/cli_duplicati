@@ -30,7 +30,7 @@ function backup ()  {
 
 function restore () {
     ${CLI} restore --tempdir=/tmp ${AUTH} --accept-any-ssl-certificate --no-encryption --use-ssl ${SERVER} /data
-	if [ $? -ne 0 ]; then
+	if [ $? -ne 0 ] && [ $? -ne 1 ] && [ $? -ne 2 ]; then
 		echo $(date) > /data/.restored
 	else
 		echo "Restore fail."
