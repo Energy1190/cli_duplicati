@@ -29,7 +29,7 @@ function backup ()  {
 }
 
 function restore () {
-    ${CLI} restore --tempdir=/tmp ${AUTH} --accept-any-ssl-certificate --no-encryption --use-ssl ${SERVER}
+    ${CLI} restore --tempdir=/tmp ${AUTH} --accept-any-ssl-certificate --no-encryption --use-ssl ${SERVER} /data
     echo $(date) > /data/.restored
 }
 
