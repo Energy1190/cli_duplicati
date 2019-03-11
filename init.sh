@@ -25,7 +25,15 @@ function backup ()  {
         echo "There is no recovery information."
         exit 1
     fi
+	if [ ! -f /data/.protection ]; then
+        echo "Not intended for backup."
+        exit 1
+    fi
+	mv /data/.restored /tmp/.restored
+	mv /data/.protection /tmp/.protection
     ${CLI} backup --tempdir=/tmp ${AUTH} --volsize=20mb --full-if-older-than=1M --accept-any-ssl-certificate --no-encryption --use-ssl /data ${SERVER}
+	mv /tmp/.restored /data/.restored
+	mv /tmp/.protection /data/.protection
 }
 
 function restore () {
