@@ -50,6 +50,10 @@ function restore () {
 	fi
 }
 
+if [ -f /etc/env_app.conf]; then
+	export $(cat /etc/env_app.conf | xargs)
+fi
+
 test_var ${BUCKET}
 test_var ${BACKUP_S3_KEY}
 test_var ${BACKUP_S3_SECRET}
