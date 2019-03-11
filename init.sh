@@ -4,7 +4,7 @@ CLI="/usr/bin/duplicati-commandline"
 BUCKET=${BUCKET}
 COMMAND=$1
 
-AUTH="--aws_access_key_id=${BACKUP_S3_KEY} --aws_secret_access_key=${BACKUP_S3_SECRET}"
+AUTH="--auth-username=${BACKUP_S3_KEY} --auth-password=${BACKUP_S3_SECRET} --restore-permissions=true"
 SERVER="s3://$(echo ${BACKUP_S3_KEY}-${BUCKET} | tr '[:upper:]' '[:lower:]')/"
 MONO_EXTERNAL_ENCODINGS="UTF-8"
 
@@ -25,7 +25,13 @@ function backup ()  {
         echo "There is no recovery information."
         exit 1
     fi
-    ${CLI} backup --tempdir=/tmp ${AUTH} --volsize=20mb --full-if-older-than=1M --accept-any-ssl-certificate --no-encryption --use-ssl /data ${SERVER}
+	
+	KEEP=""
+	if [ "${VERSION}" == "2" ] && [ ! -z "${NUM_BACKUPS}" ]; then
+		KEEP="--keep-versions=${NUM_BACKUPS}"
+	fi
+	
+    ${CLI} backup --tempdir=/tmp ${AUTH} ${KEEP} --volsize=20mb --full-if-older-than=1M --accept-any-ssl-certificate --no-encryption --use-ssl /data ${SERVER}
 }
 
 function restore () {
