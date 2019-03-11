@@ -29,6 +29,10 @@ function backup ()  {
 }
 
 function restore () {
+    if [ -f /data/.restored ]; then
+        echo "Data has already been restored."
+        exit 1
+    fi
     ${CLI} restore --tempdir=/tmp ${AUTH} --accept-any-ssl-certificate --no-encryption --use-ssl ${SERVER} /data
 	if [ $? -eq 0 ] || [ $? -eq 1 ] || [ $? -eq 2 ]; then
 		echo $(date) > /data/.restored
