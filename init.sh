@@ -50,7 +50,7 @@ function restore () {
 	fi
 }
 
-if [ -f /etc/env_app.conf]; then
+if [ -f /etc/env_app.conf ]; then
 	export $(cat /etc/env_app.conf | xargs)
 fi
 
