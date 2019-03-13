@@ -5,7 +5,7 @@ BUCKET=${BUCKET}
 COMMAND=$1
 
 AUTH="--auth-username=${BACKUP_S3_KEY} --auth-password=${BACKUP_S3_SECRET} --restore-permissions=true"
-SERVER="s3://$(echo ${BACKUP_S3_KEY}-${BUCKET} | tr '[:upper:]' '[:lower:]')/"
+SERVER="s3://$(echo ${BACKUP_S3_KEY}-${BUCKET}/v2 | tr '[:upper:]' '[:lower:]')/"
 MONO_EXTERNAL_ENCODINGS="UTF-8"
 
 function test_var () {
