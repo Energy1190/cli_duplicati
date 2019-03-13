@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CLI="/usr/bin/duplicati-commandline"
+CLI="/entrypoint.sh"
 BUCKET=${BUCKET}
 COMMAND=$1
 
