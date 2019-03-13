@@ -46,7 +46,7 @@ function restore () {
         echo "Data has already been restored."
         exit 1
     fi
-    ${CLI} restore --tempdir=/tmp ${AUTH} --accept-any-ssl-certificate --no-encryption --use-ssl ${SERVER} /data
+    ${CLI} restore --tempdir=/tmp ${AUTH} --accept-any-ssl-certificate --no-encryption --use-ssl ${SERVER}
 	if [ $? -eq 0 ] || [ $? -eq 1 ] || [ $? -eq 2 ]; then
 		echo $(date) > /data/.restored
 	else
