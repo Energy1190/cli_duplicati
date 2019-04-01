@@ -1,11 +1,11 @@
 #!/bin/bash
 
-CLI="/usr/bin/duplicati-commandline"
+CLI="/entrypoint.sh"
 BUCKET=${BUCKET}
 COMMAND=$1
 
-AUTH="--aws_access_key_id=${BACKUP_S3_KEY} --aws_secret_access_key=${BACKUP_S3_SECRET}"
-SERVER="s3://$(echo ${BACKUP_S3_KEY}-${BUCKET} | tr '[:upper:]' '[:lower:]')/"
+AUTH="--auth-username=${BACKUP_S3_KEY} --auth-password=${BACKUP_S3_SECRET} --restore-permissions=true"
+SERVER="s3://$(echo ${BACKUP_S3_KEY}-${BUCKET}/v2 | tr '[:upper:]' '[:lower:]')/"
 MONO_EXTERNAL_ENCODINGS="UTF-8"
 
 function test_var () {
@@ -15,13 +15,13 @@ function test_var () {
     fi
 }
 
+function list () {
+    ${CLI} list --tempdir=/tmp ${AUTH} --use-ssl --accept-any-ssl-certificate ${SERVER}
+}
+
 function rotate ()  {
     test_var ${DELETE_ALL_BUT_N_FULL}
     ${CLI} delete-all-but-n-full ${DELETE_ALL_BUT_N_FULL} ${AUTH} --use-ssl  --force ${SERVER}
-}
-
-function list () {
-    ${CLI} list --tempdir=/tmp ${AUTH} --accept-any-ssl-certificate ${SERVER}
 }
 
 function backup ()  {
@@ -33,10 +33,15 @@ function backup ()  {
         echo "Not intended for backup."
         exit 1
     fi
+	KEEP=""
+	if [ "${VERSION}" == "2" ] && [ ! -z "${NUM_BACKUPS}" ]; then
+		KEEP="--keep-versions=${NUM_BACKUPS}"
+	fi
+
 	mv /data/.restored /tmp/.restored
 	mv /data/.protection /tmp/.protection
-    ${CLI} backup --tempdir=/tmp ${AUTH} --volsize=20mb --full-if-older-than=1M --accept-any-ssl-certificate --no-encryption --use-ssl /data ${SERVER}
-	mv /tmp/.restored /data/.restored
+    ${CLI} backup --tempdir=/tmp ${AUTH} ${KEEP} --volsize=20mb --full-if-older-than=1M --accept-any-ssl-certificate --no-encryption --use-ssl /data ${SERVER}
+    mv /tmp/.restored /data/.restored
 	mv /tmp/.protection /data/.protection
 }
 
@@ -45,7 +50,7 @@ function restore () {
         echo "Data has already been restored."
         exit 1
     fi
-    ${CLI} restore --tempdir=/tmp ${AUTH} --accept-any-ssl-certificate --no-encryption --use-ssl ${SERVER} /data
+    ${CLI} restore --tempdir=/tmp ${AUTH} --accept-any-ssl-certificate --no-encryption --use-ssl ${SERVER}
 	if [ $? -eq 0 ] || [ $? -eq 1 ] || [ $? -eq 2 ]; then
 		echo $(date) > /data/.restored
 	else
@@ -72,7 +77,7 @@ elif [ "${COMMAND}" == 'restore' ]; then
     echo "START - restore."
     restore
 elif [ "${COMMAND}" == 'list' ]; then
-    echo "START - list."
+    echo "START - restore."
     list
 else
     echo "Command - ${COMMAND} is not supported."
