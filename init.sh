@@ -21,7 +21,7 @@ function rotate ()  {
 }
 
 function list () {
-    ${CLI} list --tempdir=/tmp ${AUTH} --use-ssl --accept-any-ssl-certificate ${SERVER}
+    ${CLI} list --tempdir=/tmp ${AUTH} --no-encryption --use-ssl --accept-any-ssl-certificate ${SERVER}
 }
 
 function backup ()  {
