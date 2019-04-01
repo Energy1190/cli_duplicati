@@ -20,6 +20,10 @@ function rotate ()  {
     ${CLI} delete-all-but-n-full ${DELETE_ALL_BUT_N_FULL} ${AUTH} --use-ssl  --force ${SERVER}
 }
 
+function list () {
+    ${CLI} list --tempdir=/tmp ${AUTH} --use-ssl --accept-any-ssl-certificate ${SERVER}
+}
+
 function backup ()  {
     if [ ! -f /data/.restored ]; then
         echo "There is no recovery information."
@@ -72,6 +76,9 @@ elif [ "${COMMAND}" == 'backup' ]; then
 elif [ "${COMMAND}" == 'restore' ]; then
     echo "START - restore."
     restore
+elif [ "${COMMAND}" == 'list' ]; then
+    echo "START - list."
+    list
 else
     echo "Command - ${COMMAND} is not supported."
     exit 1
