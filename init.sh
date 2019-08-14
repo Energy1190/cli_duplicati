@@ -35,7 +35,8 @@ function backup ()  {
     fi
 	mv /data/.restored /tmp/.restored
 	mv /data/.protection /tmp/.protection
-    ${CLI} backup --tempdir=/tmp ${AUTH} --volsize=20mb --full-if-older-than=1M --accept-any-ssl-certificate --no-encryption --use-ssl ${SERVER} /data/
+	ARGS="backup --tempdir=/tmp ${AUTH} --volsize=20mb --full-if-older-than=1M --accept-any-ssl-certificate --no-encryption --use-ssl /data ${SERVER}"
+    ${CLI} ${ARGS}
 	mv /tmp/.restored /data/.restored
 	mv /tmp/.protection /data/.protection
 }
