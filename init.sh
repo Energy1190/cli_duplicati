@@ -38,7 +38,7 @@ function backup ()  {
 	ARGS="backup --tempdir=/tmp ${AUTH} --volsize=20mb --full-if-older-than=1M --accept-any-ssl-certificate --no-encryption --use-ssl /data ${SERVER}"
     RUN="${CLI} ${ARGS}"
 	echo "DEBUG ${RUN}"
-	"${RUN}"
+	${RUN}
 	mv /tmp/.restored /data/.restored
 	mv /tmp/.protection /data/.protection
 }
